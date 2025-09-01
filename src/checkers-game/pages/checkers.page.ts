@@ -26,6 +26,7 @@ export class CheckersPage {
 
   async piecesCount(side: Side): Promise<number> {
     const board = await this.readBoard();
+
     return countPieces(board, side);
   }
 
