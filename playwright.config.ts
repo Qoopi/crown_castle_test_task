@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
   testDir: 'tests',
@@ -20,8 +20,12 @@ export default defineConfig({
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',
         baseURL: process.env.CHECKERS_URL || 'https://www.gamesforthebrain.com/game/checkers/',
-        ...devices['Desktop Chrome'],
+        channel: 'chrome',
         headless: false,
+        launchOptions: {
+          slowMo: 1000,
+        },
+        viewport: { width: 2560, height: 1440 }
       },
     },
     {
@@ -32,8 +36,12 @@ export default defineConfig({
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',
         baseURL: process.env.CARDS_API_URL || 'https://deckofcardsapi.com/',
-        ...devices['Desktop Chrome'],
+        channel: 'chrome',
         headless: true,
+        launchOptions: {
+          slowMo: 1500,
+        },
+        viewport: { width: 2560, height: 1440 }
       },
     },
   ],

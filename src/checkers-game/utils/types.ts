@@ -28,5 +28,5 @@ export function eq(a: Coord, b: Coord): boolean {
 
 export function playable({ r, c }: Coord): boolean {
   // playable (dark) squares are usually (r+c) % 2 === 1 on this board
-  return (r + c) % 2 === 1;
+  return (r + c) % 2 === 0;
 }
