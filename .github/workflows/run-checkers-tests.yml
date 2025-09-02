@@ -66,7 +66,7 @@ jobs:
           if-no-files-found: warn
 
       - name: Upload test artifacts (traces/screenshots/videos)
-        if: always()
+        if: ${{ always() && hashFiles('tests-output/**') != '' }}
         uses: actions/upload-artifact@v4
         with:
           name: tests-output-checkers
@@ -77,6 +77,11 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
       - name: Download JUnit
         uses: actions/download-artifact@v5
         with:
