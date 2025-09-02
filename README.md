@@ -1,4 +1,4 @@
-# QA Automation Coding Test — Playwright + TypeScript
+Test task for the Crown Castle team. (TS, Playwright)
 
 A compact guide to run and explain this repo.
 
