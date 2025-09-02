@@ -4,14 +4,14 @@ on:
     branches: [ master ]
     paths:
       - 'utils/checkers-game/**'
-      - 'tests/exercies_1/**'
+      - 'tests/exercise_1/**'
       - 'playwright.config.ts'
       - 'package.json'
       - 'package-lock.json'
   pull_request:
     paths:
       - 'utils/checkers-game/**'
-      - 'tests/exercies_1/**'
+      - 'tests/exercise_1/**'
       - 'playwright.config.ts'
       - 'package.json'
       - 'package-lock.json'

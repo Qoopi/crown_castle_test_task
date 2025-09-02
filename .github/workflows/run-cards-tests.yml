@@ -4,14 +4,14 @@ on:
     branches: [ master ]
     paths:
       - 'utils/card-game/**'
-      - 'tests/exercies_2/**'
+      - 'tests/exercise_2/**'
       - 'playwright.config.ts'
       - 'package.json'
       - 'package-lock.json'
   pull_request:
     paths:
       - 'utils/card-game/**'
-      - 'tests/exercies_2/**'
+      - 'tests/exercise_2/**'
       - 'playwright.config.ts'
       - 'package.json'
       - 'package-lock.json'
