@@ -17,11 +17,6 @@ async function asJson<T>(resp: APIResponse): Promise<ApiCallResult<T>> {
   }
 }
 
-/**
- * Thin wrapper around Deck of Cards API.
- * - No assertions.
- * - No deliberate errors thrown; callers should check `result.response.ok()` and `result.data`.
- */
 export class DeckService {
   private readonly request: APIRequestContext;
   private readonly apiBase = '/api/deck';

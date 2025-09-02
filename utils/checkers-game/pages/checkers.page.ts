@@ -4,15 +4,20 @@ import { emptyBoard, pieceFromSrc, setSquare } from '../helpers/board.parser';
 import { MY_MOVES, OPPONENT_MOVES } from '../helpers/hardcoded.scenario';
 
 export class CheckersPage {
-  private cells: Locator[][] | null = null;
   readonly page: Page;
   readonly board: Locator;
   readonly makeMoveText: Locator;
+  readonly orangePieces: Locator;
+  readonly bluePieces: Locator;
+  readonly restartLink: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.board = page.locator('#board');
     this.makeMoveText = page.locator('//p[@id="message"]');
+    this.orangePieces = page.locator('//img[@src="you1.gif"]');
+    this.bluePieces = page.locator('//img[@src="me1.gif"]');
+    this.restartLink = page.locator('//a[text()="Restart..."]');
   }
 
   async goto() {
@@ -22,9 +27,11 @@ export class CheckersPage {
   async getStatusText(): Promise<string | null> {
     return await this.makeMoveText.textContent();
   }
+
   async readCounts() {
-    const orange = await this.page.locator('//img[@src="you1.gif"]').count();
-    const blue = await this.page.locator('//img[@src="me1.gif"]').count();
+    const orange = await this.orangePieces.count();
+    const blue = await this.bluePieces.count();
+
     return { orange, blue };
   }
 
@@ -48,16 +55,19 @@ export class CheckersPage {
   }
 
   async waitForOpponentMoveToFinish(r: number, c: number) {
+    // Wait for the opponent's piece to appear at the specified location
     const name = `space${r - 1}${c - 1}`;
     await this.page
       .locator(`//img[@name="${name}" and @src="me1.gif"]`)
       .waitFor({ state: 'visible' });
+    // Wait for the message to change to "Make a move."
     await this.page
       .locator('//p[@id="message" and contains(text(),"Make a move.")]')
       .waitFor({ state: 'visible' });
   }
+
   async restartGame() {
-    await this.page.locator('//a[text()="Restart..."]').click();
+    await this.restartLink.click();
   }
 
   async readBoard(): Promise<Board> {
@@ -72,10 +82,7 @@ export class CheckersPage {
     return board;
   }
 
-  async playFiveScenarioMovesAndCounts(
-    myMoves: Move[] = MY_MOVES,
-    opponentsMoves: { r: number; c: number }[] = OPPONENT_MOVES,
-  ) {
+  async playFiveScenarioMovesAndCounts(myMoves: Move[], opponentsMoves: { r: number; c: number }[]) {
     const after4 = { orange: 0, blue: 0 };
     const after5 = { orange: 0, blue: 0 };
 

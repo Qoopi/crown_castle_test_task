@@ -65,11 +65,6 @@ npx playwright test --project=card-game
 ```
 
 ```bash
-# Focus a single file or test title
-npx playwright test tests/exercies_1/the.checkers.game.spec.ts -g "first scripted move"
-```
-
-```bash
 # Headed & slow-mo (handy for UI debug)
 npx playwright test --project=checkers-game --headed --slow-mo=200
 ```

@@ -1,10 +1,13 @@
 import { checkersTest as test, expect } from '../../utils/checkers-game/fixtures/checkers.fixture';
+import { pieceAt, countPieces } from '../../utils/checkers-game/helpers/board.parser';
 import { MY_MOVES, OPPONENT_MOVES } from '../../utils/checkers-game/helpers/hardcoded.scenario';
-import type { Board } from '../../utils/checkers-game/helpers/board.types';
 
 test.describe('The Checkers Game', () => {
-  test('site is up and initial counts are 12/12', async ({ checkersPage }) => {
+  test.beforeEach(async ({ checkersPage }) => {
     await checkersPage.goto();
+  })
+
+  test('NavigateToWebsite_IsUpAndRunning', async ({ checkersPage }) => {
     const board = await checkersPage.readBoard();
     const counts = countPieces(board);
 
@@ -15,9 +18,7 @@ test.describe('The Checkers Game', () => {
     expect(counts).toEqual({ orange: 12, blue: 12 });
   });
 
-  test('first scripted move places our piece at destination', async ({ checkersPage }) => {
-    await checkersPage.goto();
-
+  test('FirstPlayersMove_PieceAtCorrectDestination', async ({ checkersPage }) => {
     const myMove = MY_MOVES[0];
     await checkersPage.makeMove(myMove);
     await checkersPage.waitForOpponentMoveToFinish(OPPONENT_MOVES[0].r, OPPONENT_MOVES[0].c);
@@ -26,8 +27,7 @@ test.describe('The Checkers Game', () => {
     expect(pieceAt(board, myMove.to.r, myMove.to.c)).toBe('orange');
   });
 
-  test('restart resets to 12/12 and initial message', async ({ checkersPage }) => {
-    await checkersPage.goto();
+  test('RestartTheGame_NewGameIsOnTheScreen', async ({ checkersPage }) => {
     await checkersPage.makeMove(MY_MOVES[0]);
     await checkersPage.waitForOpponentMoveToFinish(OPPONENT_MOVES[0].r, OPPONENT_MOVES[0].c);
 
@@ -41,10 +41,8 @@ test.describe('The Checkers Game', () => {
     await expect(checkersPage.makeMoveText).toHaveText(/Select an orange piece to move./i);
   });
 
-  test('after 5 scripted moves, piece counts change as expected', async ({ checkersPage }) => {
-    await checkersPage.goto();
-
-    const { after4, after5 } = await checkersPage.playFiveScenarioMovesAndCounts();
+  test('(e2e)_Make5LegalMovesAndRestart', async ({ checkersPage }) => {
+    const { after4, after5 } = await checkersPage.playFiveScenarioMovesAndCounts(MY_MOVES, OPPONENT_MOVES);
 
     // Expect after move 4 Orange has lost 1, after move 5 Blue has lost 1
     expect.soft(after4.orange).toBe(11);
@@ -58,19 +56,8 @@ test.describe('The Checkers Game', () => {
     const counts = countPieces(board);
     expect(counts).toEqual({ orange: 12, blue: 12 });
   });
+
+  test.afterAll(async ({ browser }) => {
+    await browser.close();
+  })
 });
-
-function pieceAt(board: Board, r: number, c: number) {
-  return board[r - 1][c - 1]?.piece ?? null;
-}
-
-function countPieces(board: Board) {
-  let orange = 0,
-    blue = 0;
-  for (const row of board)
-    for (const sq of row) {
-      if (sq.piece === 'orange') orange++;
-      else if (sq.piece === 'blue') blue++;
-    }
-  return { orange, blue };
-}

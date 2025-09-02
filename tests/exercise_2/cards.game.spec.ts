@@ -1,13 +1,13 @@
 import { cardGameTest as test, expect } from '../../utils/card-game/fixtures/card.fixture';
 
 test.describe('The Cards Game', () => {
-  test('site is up', async ({ cardsHomePage }) => {
+  test('NavigateToWebsite_ItsUpAndRunning', async ({ cardsHomePage }) => {
     await cardsHomePage.open();
 
     await expect(cardsHomePage.title).toHaveText('Deck of Cards');
     await expect(cardsHomePage.subtitle).toHaveText('An API');
   });
-  test('new deck can be created', async ({ deckService }) => {
+  test('CreateNewDeck_ItsCreatedAndNotShuffled', async ({ deckService }) => {
     const res = await deckService.newDeck();
 
     expect(res.response.ok()).toBeTruthy();
@@ -17,20 +17,18 @@ test.describe('The Cards Game', () => {
     expect(res.data?.remaining).toBe(52);
     expect(res.data?.shuffled).toBe(false);
   });
-  test('shuffle returns same deck id and sets shuffled=true', async ({ deckService }) => {
-    //Arrange
+  test('ShuffleCards_ReturnCorrectDeckIdAndShuffledTrue', async ({ deckService }) => {
     const created = await deckService.newDeck();
     const id = created.data!.deck_id;
-    //Act
     const shuffled = await deckService.shuffle(id);
-    //Assert
+
     expect(created.response.ok()).toBeTruthy();
     expect(created.data?.shuffled).toBe(false);
     expect(shuffled.response.ok()).toBeTruthy();
     expect(shuffled.data?.deck_id).toBe(id);
     expect(shuffled.data?.shuffled).toBe(true);
   });
-  test('initial deal distributes 2 cards P1→P2→P1→P2 and summarizes', async ({ roundEngine }) => {
+  test('(e2e)_Distributes2CardsToEachPlayer_CheckForBlakjack', async ({ roundEngine }) => {
     const { newDeck, shuffle } = await roundEngine.startRound();
     expect(newDeck.response.ok()).toBeTruthy();
     expect(shuffle?.response.ok()).toBeTruthy();
@@ -56,7 +54,7 @@ test.describe('The Cards Game', () => {
       expect(typeof p.isBlackjack).toBe('boolean');
     }
   });
-  test('if no naturals then each player hits once more', async ({ roundEngine }) => {
+  test('(e2e)_IfNoNaturalsBlackjack_PlayersHitOneMoreTime_CheckWHoWins', async ({ roundEngine }) => {
     const { newDeck, shuffle } = await roundEngine.startRound();
     expect(newDeck.response.ok()).toBeTruthy();
     expect(shuffle?.response.ok()).toBeTruthy();

@@ -1,5 +1,6 @@
 import type { Board, Square } from './board.types';
 
+// Checking if this square is playable (even/odd row)
 export function isPlayable(r: number, c: number) {
   return (r + c) % 2 === 0;
 }
@@ -28,6 +29,22 @@ export function emptyBoard(): Board {
 }
 
 export function setSquare(board: Board, r: number, c: number, square: Partial<Square>) {
+  // DOM is 0-based, board is 1-based, way more convenient to use 1-based
   const sq = board[r - 1][c - 1];
   Object.assign(sq, square);
+}
+
+export function pieceAt(board: Board, r: number, c: number) {
+  return board[r - 1][c - 1]?.piece ?? null;
+}
+
+export function countPieces(board: Board) {
+  let orange = 0,
+    blue = 0;
+  for (const row of board)
+    for (const sq of row) {
+      if (sq.piece === 'orange') orange++;
+      else if (sq.piece === 'blue') blue++;
+    }
+  return { orange, blue };
 }
