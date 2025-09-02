@@ -83,24 +83,4 @@ npx playwright show-report
 
 > These paths are controlled via `reporter` and `use` in `playwright.config.ts` (added in step 4).
 
-## Useful npm scripts (suggested)
-
-Add these to `package.json`:
-
-```json
-{
-  "scripts": {
-    "prepare": "npx playwright install --with-deps",
-    "test": "playwright test",
-    "test:ui": "playwright test --project=checkers-game",
-    "test:api": "playwright test --project=card-game",
-    "report:html": "playwright show-report tests-report/html",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write \"{src,tests}/**/*.{ts,tsx,js,json,md}\"",
-    "typecheck": "tsc --noEmit"
-  }
-}
-```
-
 * **Artifacts** under `tests-output/` (via `use: { trace, screenshot, video, outputDir }`).
