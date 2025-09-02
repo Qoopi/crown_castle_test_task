@@ -1,7 +1,6 @@
 import type { Page, Locator } from '@playwright/test';
 import type { Board, Move, Piece } from '../helpers/board.types';
 import { emptyBoard, pieceFromSrc, setSquare } from '../helpers/board.parser';
-import { MY_MOVES, OPPONENT_MOVES } from '../helpers/hardcoded.scenario';
 
 export class CheckersPage {
   readonly page: Page;

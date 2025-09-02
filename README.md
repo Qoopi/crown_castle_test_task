@@ -90,12 +90,15 @@ Add these to `package.json`:
 ```json
 {
   "scripts": {
+    "prepare": "npx playwright install --with-deps",
     "test": "playwright test",
     "test:ui": "playwright test --project=checkers-game",
-    "test:cards": "playwright test --project=card-game",
-    "report": "playwright show-report",
-    "lint": "eslint . --ext .ts",
-    "fmt": "prettier --write ."
+    "test:api": "playwright test --project=card-game",
+    "report:html": "playwright show-report tests-report/html",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"{src,tests}/**/*.{ts,tsx,js,json,md}\"",
+    "typecheck": "tsc --noEmit"
   }
 }
 ```
