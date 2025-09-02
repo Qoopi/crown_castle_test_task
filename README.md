@@ -12,6 +12,14 @@ CI: GitHub Actions — ready-to-use pipelines for tests (all/checkers/cards). Se
 * **ESLint + Prettier** — style & static checks
 * **Reports**: Playwright HTML + JUnit XML (paths configured in `playwright.config.ts`)
 
+## Prerequisites
+
+- Node.js LTS (18.x or 20.x)
+- npm (bundled with Node.js) or nvm for managing Node versions (optional)
+- Git
+- macOS, Linux, or Windows (WSL2 recommended on Windows, optional)
+- Internet access to download Playwright browsers during setup (no manual browser install needed)
+
 ## Project structure
 
 ```
