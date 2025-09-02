@@ -1,6 +1,7 @@
 ### Test task for the Crown Castle team. (TS, Playwright)
 
 A compact guide to run and explain this repo.
+CI: GitHub Actions — ready-to-use pipelines for tests (all/checkers/cards). See runs: https://github.com/Qoopi/crown_castle_test_task/actions
 
 ## Tech stack
 

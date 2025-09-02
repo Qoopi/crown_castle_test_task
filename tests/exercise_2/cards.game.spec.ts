@@ -54,7 +54,7 @@ test.describe('The Cards Game', () => {
       expect(typeof p.isBlackjack).toBe('boolean');
     }
   });
-  test('(e2e)_IfNoNaturalsBlackjack_PlayersHitOneMoreTime_CheckWHoWins', async ({ roundEngine }) => {
+  test('(e2e)_IfNoNaturalsBlackjack_PlayersHitOneMoreTime_CheckWhoWins', async ({ roundEngine }) => {
     const { newDeck, shuffle } = await roundEngine.startRound();
     expect(newDeck.response.ok()).toBeTruthy();
     expect(shuffle?.response.ok()).toBeTruthy();
