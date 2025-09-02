@@ -2,11 +2,11 @@ import { cardGameTest as test, expect } from '../../utils/card-game/fixtures/car
 
 test.describe('The Cards Game', () => {
   test('site is up', async ({ cardsHomePage }) => {
-    await cardsHomePage.open()
+    await cardsHomePage.open();
 
     await expect(cardsHomePage.title).toHaveText('Deck of Cards');
     await expect(cardsHomePage.subtitle).toHaveText('An API');
-  })
+  });
   test('new deck can be created', async ({ deckService }) => {
     const res = await deckService.newDeck();
 

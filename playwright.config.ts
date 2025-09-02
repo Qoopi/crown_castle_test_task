@@ -21,9 +21,6 @@ export default defineConfig({
         video: 'retain-on-failure',
         baseURL: process.env.CHECKERS_URL || 'https://www.gamesforthebrain.com/game/checkers/',
         headless: true,
-        launchOptions: {
-          slowMo: 2000,
-        },
         actionTimeout: 10_000
       },
     },
@@ -36,10 +33,7 @@ export default defineConfig({
         video: 'retain-on-failure',
         baseURL: process.env.CARDS_API_URL || 'https://deckofcardsapi.com/',
         channel: 'chrome',
-        headless: true,
-        launchOptions: {
-          slowMo: 1000,
-        },
+        headless: true
       },
     },
   ],

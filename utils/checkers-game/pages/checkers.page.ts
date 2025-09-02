@@ -1,7 +1,7 @@
 import type { Page, Locator } from '@playwright/test';
 import type { Board, Move, Piece } from '../helpers/board.types';
 import { emptyBoard, pieceFromSrc, setSquare } from '../helpers/board.parser';
-import { HARD_SCENARIO } from '../helpers/hardcoded.scenario';
+import { MY_MOVES, OPPONENT_MOVES } from '../helpers/hardcoded.scenario';
 
 export class CheckersPage {
   private cells: Locator[][] | null = null;
@@ -24,9 +24,7 @@ export class CheckersPage {
   }
   async readCounts() {
     const orange = await this.page.locator('//img[@src="you1.gif"]').count();
-    console.log(`Orange pieces: ${orange}`);
     const blue = await this.page.locator('//img[@src="me1.gif"]').count();
-    console.log(`Blue pieces: ${blue}`);
     return { orange, blue };
   }
 
@@ -49,13 +47,15 @@ export class CheckersPage {
     await this.makeMoveByCoords(move.from.r, move.from.c, move.to.r, move.to.c);
   }
 
-  async waitForOpponent() {
-    // Wait for the opponent to move (the "Make a move." message appears)
+  async waitForOpponentMoveToFinish(r: number, c: number) {
+    const name = `space${r - 1}${c - 1}`;
+    await this.page
+      .locator(`//img[@name="${name}" and @src="me1.gif"]`)
+      .waitFor({ state: 'visible' });
     await this.page
       .locator('//p[@id="message" and contains(text(),"Make a move.")]')
       .waitFor({ state: 'visible' });
   }
-
   async restartGame() {
     await this.page.locator('//a[text()="Restart..."]').click();
   }
@@ -72,13 +72,16 @@ export class CheckersPage {
     return board;
   }
 
-  async playFiveScenarioMovesAndCounts(scenario: Move[] = HARD_SCENARIO) {
+  async playFiveScenarioMovesAndCounts(
+    myMoves: Move[] = MY_MOVES,
+    opponentsMoves: { r: number; c: number }[] = OPPONENT_MOVES,
+  ) {
     const after4 = { orange: 0, blue: 0 };
     const after5 = { orange: 0, blue: 0 };
 
     for (let i = 0; i < 5; i++) {
-      await this.makeMove(scenario[i]);
-      await this.waitForOpponent();
+      await this.makeMove(myMoves[i]);
+      await this.waitForOpponentMoveToFinish(opponentsMoves[i].r, opponentsMoves[i].c);
 
       if (i === 3) {
         const counts = await this.readCounts();
@@ -101,9 +104,7 @@ export class CheckersPage {
   }
 
   private async clickSquare(r: number, c: number) {
-    console.log(`Clicking square ${r},${c}`);
     const img = this.cell(r, c);
-    await img.waitFor({ state: 'visible' });
     await img.click();
   }
 }
