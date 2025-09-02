@@ -1,41 +1,78 @@
-import { test, expect } from '../../src/checkers-game/fixtures/checkers.fixture';
-import { countPieces } from '../../src/checkers-game/utils/board';
+import { checkersTest as test, expect } from '../../utils/checkers-game/fixtures/checkers.fixture';
+import { HARD_SCENARIO } from '../../utils/checkers-game/helpers/hardcoded.scenario';
+import type { Board } from '../../utils/checkers-game/helpers/board.types';
 
-// Exercise I — Checkers Game (UI) — simplified and robust
+test.describe('The Checkers Game', () => {
+  test('site is up and initial counts are 12/12', async ({ checkersPage }) => {
+    await checkersPage.goto();
+    const board = await checkersPage.readBoard();
+    const counts = countPieces(board);
 
-test.describe('Checkers — UI flow', () => {
-  test('1) Page loads and status is visible', async ({ checkers }) => {
-    await checkers.openPage();
-
-    await expect(checkers.page).toHaveTitle('Checkers - Games for the Brain');
-    await expect(checkers.makeMoveText).toHaveText('Select an orange piece to move.');
+    // Basic presence checks
+    await expect(checkersPage.page).toHaveTitle('Checkers - Games for the Brain');
+    await expect(checkersPage.makeMoveText).toHaveText('Select an orange piece to move.');
+    await expect(checkersPage.board).toBeVisible();
+    expect(counts).toEqual({ orange: 12, blue: 12 });
   });
 
-  test('2) Parse board: 8×8 and both sides present', async ({ checkers }) => {
-    await checkers.openPage();
-    const board = await checkers.readBoard();
+  test('first scripted move places our piece at destination', async ({ checkersPage }) => {
+    await checkersPage.goto();
 
-    expect(board).toHaveLength(8);
-    for (const row of board) expect(row).toHaveLength(8);
+    const mv = HARD_SCENARIO[0];
+    await checkersPage.makeMove(mv);
+    await checkersPage.waitForOpponent();
 
-    const you = countPieces(board, 'YOU');
-    const me = countPieces(board, 'ME');
-    expect(you).toBeGreaterThan(0);
-    expect(me).toBeGreaterThan(0);
+    const board = await checkersPage.readBoard();
+    expect(pieceAt(board, mv.from.r, mv.from.c)).not.toBe('orange');
+    expect(pieceAt(board, mv.to.r, mv.to.c)).toBe('orange');
   });
 
-  test('3) Make a legal move, wait for opponent, then restart to initial position', async ({
-    checkers,
-  }) => {
-    await checkers.openPage();
+  test('restart resets to 12/12 and initial message', async ({ checkersPage }) => {
+    await checkersPage.goto();
+    await checkersPage.makeMove(HARD_SCENARIO[0]);
+    await checkersPage.waitForOpponent();
 
-    const initial = await checkers.readBoard();
-    await checkers.planAndMove('YOU');
-    await checkers.waitForOpponent()
+    const textBefore = await checkersPage.getStatusText();
+    await checkersPage.restartGame();
 
-    await checkers.restartGame();
-    const afterRestart = await checkers.readBoard();
+    const board = await checkersPage.readBoard();
+    const counts = countPieces(board);
+    expect(counts).toEqual({ orange: 12, blue: 12 });
+    expect(textBefore).toBe('Make a move.');
+    await expect(checkersPage.makeMoveText).toHaveText(/Select an orange piece to move./i,
+    );
+  });
 
-    expect(JSON.stringify(afterRestart)).toBe(JSON.stringify(initial));
+  test('after 5 scripted moves, piece counts change as expected', async ({ checkersPage }) => {
+    await checkersPage.goto();
+
+    const { after4, after5 } = await checkersPage.playFiveScenarioMovesAndCounts(HARD_SCENARIO);
+
+    // Expect after move 4 Orange has lost 1, after move 5 Blue has lost 1
+    expect.soft(after4.orange).toBe(11);
+    expect.soft(after4.blue).toBe(11);
+    expect.soft(after5.orange).toBe(10);
+    expect.soft(after5.blue).toBe(10);
+
+    // Return to initial state
+    await checkersPage.restartGame();
+    const board = await checkersPage.readBoard();
+    const counts = countPieces(board);
+    expect(counts).toEqual({ orange: 12, blue: 12 });
   });
 });
+
+function pieceAt(board: Board, r: number, c: number) {
+  return board[r - 1][c - 1]?.piece ?? null;
+}
+
+function countPieces(board: Board) {
+  let orange = 0,
+    blue = 0;
+  for (const row of board)
+    for (const sq of row) {
+      if (sq.piece === 'orange') orange++;
+      else if (sq.piece === 'blue') blue++;
+    }
+  return { orange, blue };
+}

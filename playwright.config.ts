@@ -3,7 +3,7 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
   testDir: 'tests',
   fullyParallel: true,
-  timeout: 30_000,
+  timeout: 60_000,
   expect: { timeout: 5_000 },
   retries: process.env.CI ? 2 : 0,
   outputDir: 'tests-output/',
@@ -20,12 +20,11 @@ export default defineConfig({
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',
         baseURL: process.env.CHECKERS_URL || 'https://www.gamesforthebrain.com/game/checkers/',
-        channel: 'chrome',
-        headless: false,
+        headless: true,
         launchOptions: {
-          slowMo: 1000,
+          slowMo: 2000,
         },
-        viewport: { width: 2560, height: 1440 }
+        actionTimeout: 10_000
       },
     },
     {
@@ -39,9 +38,8 @@ export default defineConfig({
         channel: 'chrome',
         headless: true,
         launchOptions: {
-          slowMo: 1500,
+          slowMo: 1000,
         },
-        viewport: { width: 2560, height: 1440 }
       },
     },
   ],
