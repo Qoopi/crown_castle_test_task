@@ -2,7 +2,19 @@ name: Run all
 on:
   push:
     branches: [ master ]
+    paths:
+      - 'utils/**'
+      - 'tests/**'
+      - 'playwright.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
   pull_request:
+    paths:
+      - 'utils/**'
+      - 'tests/**'
+      - 'playwright.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
   workflow_dispatch: { }
 
 permissions:
