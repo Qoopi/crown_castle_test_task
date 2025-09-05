@@ -86,4 +86,4 @@ npx playwright show-report
 
 * **JUnit**: `tests-report/junit/junit.xml`
 * **HTML**: `tests-report/html/` (opened by `npx playwright show-report`)
-* **Artifacts** under `tests-output/` (via `use: { trace, screenshot, video, outputDir }`).
+* **Artifacts** under `tests-output/` (via `use: { trace, screenshot, video, outputDir }`)
