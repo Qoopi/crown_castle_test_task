@@ -24,15 +24,15 @@ CI: GitHub Actions — ready-to-use pipelines for tests (all/checkers/cards). Se
 
 ```
 utils/
-  card-game/                 # API + Blackjack orchestration (used by cards tests)
+  card-game/                 # API + Blackjack orchestration
     domain/                  # plain types + scoring
     round/                   # RoundEngine + summary logger
     services/                # Playwright APIRequestContext wrapper
-    fixtures/                # Playwright fixtures (deckService, roundEngine)
+    fixtures/                # Playwright fixtures
   checkers-game/             # UI POM for GamesForTheBrain Checkers
     helpers/                 # tiny types + parsing
-    pages/checkers.page.ts   # POM (no assertions)
-    fixtures/                # Playwright fixture (checkersPage)
+    pages/checkers.page.ts   # POM
+    fixtures/                # Playwright fixture
 
 tests/
   exercies_1/                # Checkers UI suite
@@ -40,7 +40,7 @@ tests/
   exercies_2/                # Cards API/engine suite
     the.cards.game.spec.ts
 
-.github/workflows/           # CI (all/checkers/cards) with dorny/test-reporter
+.github/workflows/           # CI 
 ```
 
 ## One-time local setup
