@@ -86,8 +86,4 @@ npx playwright show-report
 
 * **JUnit**: `tests-report/junit/junit.xml`
 * **HTML**: `tests-report/html/` (opened by `npx playwright show-report`)
-* **Artifacts** (traces, screenshots, videos): `tests-output/`
-
-> These paths are controlled via `reporter` and `use` in `playwright.config.ts` (added in step 4).
-
 * **Artifacts** under `tests-output/` (via `use: { trace, screenshot, video, outputDir }`).
