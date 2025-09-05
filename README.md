@@ -29,8 +29,6 @@ utils/
     round/                   # RoundEngine + summary logger
     services/                # Playwright APIRequestContext wrapper
     fixtures/                # Playwright fixtures (deckService, roundEngine)
-  card-game-simple/          # (optional) beginner-friendly alt refactor
-    card.logic.ts | deck.service.ts | round.engine.ts | fixtures/
   checkers-game/             # UI POM for GamesForTheBrain Checkers
     helpers/                 # tiny types + parsing
     pages/checkers.page.ts   # POM (no assertions)
