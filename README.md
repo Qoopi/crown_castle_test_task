@@ -36,9 +36,9 @@ utils/
 
 tests/
   exercies_1/                # Checkers UI suite
-    the.checkers.game.spec.ts
+    checkers.game.spec.ts
   exercies_2/                # Cards API/engine suite
-    the.cards.game.spec.ts
+    cards.game.spec.ts
 
 .github/workflows/           # CI 
 ```
